@@ -12,7 +12,32 @@ namespace SecurityLibrary
         char[,] charMatrix = new char[5, 5];
         public string Decrypt(string cipherText, string key)
         {
-            throw new NotImplementedException();
+            constructCharMatrix(key);
+            string plainText = "";
+            cipherText = cipherText.ToLower();
+            int cipherLength = cipherText.Length;
+            for (int i = 0; i < cipherLength; i += 2)
+            {
+                Tuple<int, int> A = findCharInMatrix(cipherText[i]);
+                Tuple<int, int> B = findCharInMatrix(cipherText[i + 1]);
+                if (A.Item1 == B.Item1)
+                {
+                    plainText += charMatrix[A.Item1, (A.Item2 - 1 + COLUMNS) % COLUMNS];
+                    plainText += charMatrix[B.Item1, (B.Item2 - 1 + COLUMNS) % COLUMNS];
+                }
+                else if (A.Item2 == B.Item2)
+                {
+                    plainText += charMatrix[(A.Item1 - 1 + ROWS) % ROWS, A.Item2];
+                    plainText += charMatrix[(B.Item1 - 1 + ROWS) % ROWS, B.Item2];
+                }
+                else
+                {
+                    plainText += charMatrix[A.Item1, B.Item2];
+                    plainText += charMatrix[B.Item1, A.Item2];
+                }
+            }
+            plainText=removeXFromPlain(plainText);
+            return plainText;
         }
 
         public string Encrypt(string plainText, string key)
@@ -97,6 +122,25 @@ namespace SecurityLibrary
                 }
             }
             return null;
+        }
+        public string removeXFromPlain(string plainText)
+        {
+            int plainLength = plainText.Length;
+            string text = "";
+            text += plainText[0];
+            for (int i = 1; i < plainLength-1; i++)
+            {
+                if (plainText[i] == 'x' && plainText[i - 1] == plainText[i + 1]) 
+                    continue;
+                text += plainText[i];
+            }
+            if (plainText.Last() != 'x') text += plainText.Last();
+            return text;
+        }
+
+        public string Analyse(string largeCipher)
+        {
+            throw new NotImplementedException();
         }
     }
 }

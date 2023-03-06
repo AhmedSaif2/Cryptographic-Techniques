@@ -51,6 +51,8 @@ namespace SecurityLibrary
             {
                 Tuple<int,int> A = findCharInMatrix(plainText[i]);
                 Tuple<int, int> B;
+                char firstChar, secondChar;
+
                 if (i + 1 >= plainText.Length || plainText[i] == plainText[i + 1])
                 {
                     B = findCharInMatrix('x');
@@ -62,19 +64,21 @@ namespace SecurityLibrary
                 }
                 if (A.Item1 == B.Item1)
                 {
-                    cipherText += charMatrix[A.Item1, (A.Item2 + 1) % COLUMNS];
-                    cipherText += charMatrix[B.Item1, (B.Item2 + 1) % COLUMNS];
+                    firstChar = charMatrix[A.Item1, (A.Item2 + 1) % COLUMNS];
+                    secondChar = charMatrix[B.Item1, (B.Item2 + 1) % COLUMNS];
                 }
                 else if (A.Item2 == B.Item2)
                 {
-                    cipherText += charMatrix[(A.Item1 + 1) % ROWS, A.Item2 ];
-                    cipherText += charMatrix[(B.Item1 + 1) % ROWS, B.Item2 ];
+                    firstChar = charMatrix[(A.Item1 + 1) % ROWS, A.Item2 ];
+                    secondChar = charMatrix[(B.Item1 + 1) % ROWS, B.Item2 ];
                 }
                 else
                 {
-                    cipherText += charMatrix[A.Item1 , B.Item2];
-                    cipherText += charMatrix[B.Item1, A.Item2];
+                    firstChar = charMatrix[A.Item1 , B.Item2];
+                    secondChar = charMatrix[B.Item1, A.Item2];
                 }
+                cipherText += firstChar;
+                cipherText += secondChar;
             }
             return cipherText;
         }

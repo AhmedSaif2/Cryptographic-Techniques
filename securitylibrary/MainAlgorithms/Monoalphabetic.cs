@@ -92,8 +92,10 @@ namespace SecurityLibrary
             cipher = cipher.ToLower();
             for (int i = 0; i < 26; i++)
                 cipher_freq.Add((char)('a' + i), 0);
+
             for (int i = 0; i < cipher.Length; i++)
                 cipher_freq[cipher[i]]++;
+
             cipher_freq = cipher_freq.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             char[] key = new char[26];
             int back = 25;

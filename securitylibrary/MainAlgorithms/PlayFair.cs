@@ -20,21 +20,24 @@ namespace SecurityLibrary
             {
                 Tuple<int, int> A = findCharInMatrix(cipherText[i]);
                 Tuple<int, int> B = findCharInMatrix(cipherText[i + 1]);
+                char firstChar, secondChar;
                 if (A.Item1 == B.Item1)
                 {
-                    plainText += charMatrix[A.Item1, (A.Item2 - 1 + COLUMNS) % COLUMNS];
-                    plainText += charMatrix[B.Item1, (B.Item2 - 1 + COLUMNS) % COLUMNS];
+                    firstChar = charMatrix[A.Item1, (A.Item2 - 1 + COLUMNS) % COLUMNS];
+                    secondChar = charMatrix[B.Item1, (B.Item2 - 1 + COLUMNS) % COLUMNS];
                 }
                 else if (A.Item2 == B.Item2)
                 {
-                    plainText += charMatrix[(A.Item1 - 1 + ROWS) % ROWS, A.Item2];
-                    plainText += charMatrix[(B.Item1 - 1 + ROWS) % ROWS, B.Item2];
+                    firstChar = charMatrix[(A.Item1 - 1 + ROWS) % ROWS, A.Item2];
+                    secondChar = charMatrix[(B.Item1 - 1 + ROWS) % ROWS, B.Item2];
                 }
                 else
                 {
-                    plainText += charMatrix[A.Item1, B.Item2];
-                    plainText += charMatrix[B.Item1, A.Item2];
+                    firstChar = charMatrix[A.Item1, B.Item2];
+                    secondChar = charMatrix[B.Item1, A.Item2];
                 }
+                plainText += firstChar;
+                plainText += secondChar;
             }
             plainText=removeXFromPlain(plainText);
             return plainText;
@@ -130,11 +133,11 @@ namespace SecurityLibrary
             text += plainText[0];
             for (int i = 1; i < plainLength-1; i++)
             {
-                if (plainText[i] == 'x' && plainText[i - 1] == plainText[i + 1]) 
+                if (i % 2 == 1 && plainText[i] == 'x' && plainText[i - 1] == plainText[i + 1])
                     continue;
                 text += plainText[i];
             }
-            if (plainText.Last() != 'x') text += plainText.Last();
+            if (plainText.Last()!='x')text += plainText.Last();
             return text;
         }
 
